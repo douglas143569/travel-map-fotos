@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.egg-info/
+
+# Fotos enviadas pelo usuário (não subir dados pessoais)
+uploads/
+
+# Sistema
+.DS_Store
+Thumbs.db
