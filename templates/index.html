@@ -9,8 +9,16 @@
 </head>
 <body>
   <header>
-    <h1>Travel Map Fotos</h1>
-    <p>Marque sua viagem no mapa, envie fotos e crie slides por período ou por viagem.</p>
+    <div class="header-content">
+      <div>
+        <h1>Travel Map Fotos</h1>
+        <p>Marque sua viagem no mapa, envie fotos e crie slides por período ou por viagem.</p>
+      </div>
+      <div class="header-user">
+        <span>Olá, <strong>{{ current_user.username }}</strong></span>
+        <a href="/logout" class="logout-btn">Sair</a>
+      </div>
+    </div>
   </header>
 
 <main>
@@ -38,11 +46,6 @@
             {% for state in states_cities.keys() %}
             <option value="{{ state }}">{{ state }}</option>
             {% endfor %}
-          </select>
-
-          <label>Cidade</label>
-          <select id="city-select" name="city" required>
-            <option value="">Selecione a cidade</option>
           </select>
 
           <label>Data da foto</label>

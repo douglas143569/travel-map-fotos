@@ -1,5 +1,4 @@
 const stateSelect = document.getElementById("state-select");
-const citySelect = document.getElementById("city-select");
 const photoForm = document.getElementById("photo-form");
 const uploadStatus = document.getElementById("upload-status");
 const gallery = document.getElementById("photo-gallery");
@@ -24,27 +23,6 @@ let periodControls = null;
 let tripControls = null;
 let applyPeriodButton = null;
 
-function updateCityOptions() {
-  const selectedState = stateSelect?.value;
-  if (!selectedState) {
-    if (citySelect) citySelect.innerHTML = '<option value="">Selecione a cidade</option>';
-    return;
-  }
-
-  if (!STATES_CITIES[selectedState]) {
-    if (citySelect) citySelect.innerHTML = '<option value="">Selecione a cidade</option>';
-    return;
-  }
-
-  if (!citySelect) return;
-  citySelect.innerHTML = '<option value="">Selecione a cidade</option>';
-  STATES_CITIES[selectedState].forEach((city) => {
-    const option = document.createElement("option");
-    option.value = city;
-    option.textContent = city;
-    citySelect.appendChild(option);
-  });
-}
 
 function showPhotosForState(state) {
   const panel = document.getElementById("state-photo-gallery");
@@ -72,7 +50,7 @@ function showPhotosForState(state) {
     card.innerHTML = `
       <img src="/uploads/${item.filename}" alt="Foto de viagem" />
       <div class="meta">
-        <p><strong>${item.city}</strong></p>
+        <p><strong>${item.state}</strong></p>
         <p>${item.date}</p>
         <p>${item.caption || "Sem descrição"}</p>
       </div>
@@ -194,7 +172,7 @@ function renderGallery() {
     card.innerHTML = `
       <img src="/uploads/${item.filename}" alt="Foto de viagem" />
       <div class="meta">
-        <p><strong>${item.city}, ${item.state}</strong></p>
+        <p><strong>${item.state}</strong></p>
         <p>${item.date}</p>
         <p>${item.caption || "Sem descrição"}</p>
       </div>
@@ -218,7 +196,7 @@ function updateSlide() {
   slideshow.classList.remove("hidden");
   const item = slideItems[currentSlideIndex];
   slideImage.src = `/uploads/${item.filename}`;
-  slideInfo.textContent = `${item.date} — ${item.city}, ${item.state} — ${item.caption || "Sem descrição"}`;
+  slideInfo.textContent = `${item.date} — ${item.state} — ${item.caption || "Sem descrição"}`;
 }
 
 function openSlide(index) {
@@ -307,9 +285,6 @@ function initMap() {
 
               if (stateSelect) {
                 stateSelect.value = stateName;
-                updateCityOptions();
-                const cities = STATES_CITIES[stateName] || [];
-                if (cities[0]) citySelect.value = cities[0];
               }
 
               document.getElementById("state-photos-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -332,8 +307,6 @@ function initMap() {
 }
 
 // bindings de UI
-stateSelect?.addEventListener("change", updateCityOptions);
-
 periodControls = document.getElementById("period-controls");
 tripControls = document.getElementById("trip-controls");
 startDateInput = document.getElementById("start-date");
@@ -386,7 +359,6 @@ photoForm?.addEventListener("submit", async (event) => {
     uploadStatus.textContent = "Foto enviada com sucesso!";
     uploadStatus.style.color = "#2e7d32";
     photoForm.reset();
-    citySelect.innerHTML = '<option value="">Selecione a cidade</option>';
 
     await loadPhotos();
   } catch (error) {
